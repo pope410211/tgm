@@ -1,5 +1,3 @@
-const test = require('firebase-functions-test');
-const firebase = require('firebase');
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const serviceAccount = require('./serviceAccount');
@@ -11,10 +9,10 @@ admin.initializeApp({
 });
 
 exports.updateSales = functions.https.onRequest((req, res) => {
-    const apiKey = functions.config().tmgconfig.apiKey;
-    const locId = functions.config().tmgconfig.storeid;
+    const apiKey = functions.config().tgmconfig.apikey;
+    const locId = functions.config().tgmconfig.storeid;
     const baseUrl = 'connect.squareup.com';
-    const path = 'v1/' + locId + 'payments?';
+    const path = '/v1/' + locId + '/payments?';
     const requestHeaders = {
         'Authorization': 'Bearer ' + apiKey,
         'Accept': 'application/json',
@@ -28,6 +26,7 @@ exports.updateSales = functions.https.onRequest((req, res) => {
     // Custom Promise
     let remoteCalls = function(urlOptions) {
         return new Promise(((resolve, reject) => {
+            console.info('urlOptions', urlOptions);
           let makeCall = https.request(urlOptions, (response) => {
             if (response.statusCode !== 200) {
               reject(new Error('Status Code:' + response.statusCode));
@@ -47,9 +46,8 @@ exports.updateSales = functions.https.onRequest((req, res) => {
         }));
       }; // end remoteCalls()
 
-      let reqPath = path + 'begin_time=' + yesterdayDate.toISOString() + '&end_time=' + todaysDate;
+      let reqPath = path + 'begin_time=' + yesterdayDate.toISOString() + '&end_time=' + todaysDate.toISOString();
       reqBody.path = reqPath;
-
       return remoteCalls(reqBody).then((sqRes) => {
         const dailyTrans = JSON.parse(sqRes);
         let itemsSoldArray = [];
@@ -58,10 +56,15 @@ exports.updateSales = functions.https.onRequest((req, res) => {
               itemsSoldArray.push(dailyTrans[i].itemizations[t]);
             }
           }
+
+          /* TODO:
+            Loop over items, and insert into database.
+            Return a 200 OK response code to finish the bot.
+          */
           return admin.database().ref('productSales/BAA').push( {
               item: itemsSoldArray[0].notes, // hardcoded array is temporary for testing.
               price: itemsSoldArray[0].gross_sales_money.amount,
               qty: itemsSoldArray[0].quantity
           });
-      }).catch((err) => console.error(err));
+      }).catch((err) => console.error('Promise Rejected: ', err));
 });
