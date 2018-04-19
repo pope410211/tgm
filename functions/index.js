@@ -14,7 +14,7 @@ exports.updateSales = functions.https.onRequest((req, res) => {
     const apiKey = functions.config().tmgconfig.apiKey;
     const locId = functions.config().tmgconfig.storeid;
     const baseUrl = 'connect.squareup.com';
-    const path = 'v1/payments?';
+    const path = 'v1/' + locId + 'payments?';
     const requestHeaders = {
         'Authorization': 'Bearer ' + apiKey,
         'Accept': 'application/json',
