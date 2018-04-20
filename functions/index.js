@@ -52,6 +52,8 @@ exports.updateSales = functions.https.onRequest((req, res) => {
         let itemsSoldArray = [];
         for (var i = 0; i < dailyTrans.length; i++) {
             for (var t = 0; t < dailyTrans[i].itemizations.length; t++) {
+              const transactionDate = dailyTrans[i].created_at;
+              dailyTrans[i].itemizations[t].saleDate = transactionDate;
               itemsSoldArray.push(dailyTrans[i].itemizations[t]);
             }
           }
@@ -69,7 +71,7 @@ exports.updateSales = functions.https.onRequest((req, res) => {
                 item: itemsSoldArray[i].notes, 
                 price: itemsSoldArray[i].gross_sales_money.amount,
                 qty: itemsSoldArray[i].quantity,
-                date: yesterdayDate.toISOString()
+                date: itemsSoldArray[i].saleDate
             }));
           } // End For Loop
           return Promise.all(promises).then(() => {
