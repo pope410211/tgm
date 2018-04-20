@@ -26,7 +26,6 @@ exports.updateSales = functions.https.onRequest((req, res) => {
     // Custom Promise
     let remoteCalls = function(urlOptions) {
         return new Promise(((resolve, reject) => {
-            console.info('urlOptions', urlOptions);
           let makeCall = https.request(urlOptions, (response) => {
             if (response.statusCode !== 200) {
               reject(new Error('Status Code:' + response.statusCode));
@@ -57,14 +56,24 @@ exports.updateSales = functions.https.onRequest((req, res) => {
             }
           }
 
-          /* TODO:
-            Loop over items, and insert into database.
-            Return a 200 OK response code to finish the bot.
-          */
-          return admin.database().ref('productSales/BAA').push( {
-              item: itemsSoldArray[0].notes, // hardcoded array is temporary for testing.
-              price: itemsSoldArray[0].gross_sales_money.amount,
-              qty: itemsSoldArray[0].quantity
-          });
-      }).catch((err) => console.error('Promise Rejected: ', err));
+          let promises = [];
+
+          for (let i = 0; i < itemsSoldArray.length; i++) {
+            const sku = itemsSoldArray[i].item_detail.sku;
+            const tmpItem = itemsSoldArray[i];
+            if(tmpItem.notes === undefined || tmpItem.notes === null) {
+                tmpItem.notes = 'Item Info Not Entered';
+            }
+
+            promises.push(admin.database().ref('productSales/' + sku).push({
+                item: itemsSoldArray[i].notes, 
+                price: itemsSoldArray[i].gross_sales_money.amount,
+                qty: itemsSoldArray[i].quantity,
+                date: yesterdayDate.toISOString()
+            }));
+          } // End For Loop
+          return Promise.all(promises).then(() => {
+            return res.status(200).end();
+          }).catch((err) => {console.error('Err in Promise Array: \n', err); res.end(); });
+      }).catch((err) => {console.error('Promise Rejected: ', err).end();});
 });
