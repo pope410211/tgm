@@ -8,7 +8,7 @@ import 'rxjs/add/operator/mergeMap';
 @Component({
   selector: 'app-root',
   template: `
-
+    <app-header></app-header>
     <router-outlet></router-outlet>
 
   `

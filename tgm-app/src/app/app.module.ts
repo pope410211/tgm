@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { RoutesModule } from './routes.module';
 import { AppComponent } from './app.component';
 import { MainComponent } from '../app/components/main.component';
+import { HeaderComponent } from '../app/components/header.component';
 
 @NgModule({
   imports: [
@@ -13,11 +14,13 @@ import { MainComponent } from '../app/components/main.component';
   exports: [
     RoutesModule,
     AppComponent,
-    MainComponent
+    MainComponent,
+    HeaderComponent
   ],
   declarations: [
     AppComponent,
-    MainComponent
+    MainComponent,
+    HeaderComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
