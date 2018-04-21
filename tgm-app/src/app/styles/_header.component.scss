@@ -1,0 +1,17 @@
+#b2cNavBar {
+    position: fixed;
+    width: 100%;
+    background-color: rgba(58,119,127, 0.5);
+}
+
+.b2cLinkList {
+    .b2cLinkItem {
+        .b2cLink {
+            color: $brand-white;
+
+            &:hover {
+                color: $brand-trq-drk;
+            }
+        }
+    }
+}
