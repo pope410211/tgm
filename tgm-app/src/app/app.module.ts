@@ -5,6 +5,7 @@ import { RoutesModule } from './routes.module';
 import { AppComponent } from './app.component';
 import { MainComponent } from '../app/components/main.component';
 import { HeaderComponent } from '../app/components/header.component';
+import { LoginModalComponent } from '../app/components/login-modal.component';
 
 @NgModule({
   imports: [
@@ -15,12 +16,14 @@ import { HeaderComponent } from '../app/components/header.component';
     RoutesModule,
     AppComponent,
     MainComponent,
-    HeaderComponent
+    HeaderComponent,
+    LoginModalComponent
   ],
   declarations: [
     AppComponent,
     MainComponent,
-    HeaderComponent
+    HeaderComponent,
+    LoginModalComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

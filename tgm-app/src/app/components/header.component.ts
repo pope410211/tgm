@@ -23,7 +23,7 @@ import { Component, OnInit } from '@angular/core';
                         <a class="nav-link b2cLink" href="#gal">Gallery</a>
                     </li>
                     <li class="nav-item b2cLinkItem">
-                        <a class="nav-link b2cLink">Vendor Login</a>
+                        <a class="nav-link b2cLink" data-toggle="modal" data-target="#loginModal">Vendor Login</a>
                     </li>
                 </ul>
             </div>
