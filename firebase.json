@@ -12,7 +12,7 @@
     ]
   },
   "hosting": {
-    "public": "src",
+    "public": "tgm-app/dist",
     "ignore": [
       "firebase.json",
       "**/.*",

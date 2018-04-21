@@ -66,16 +66,18 @@ exports.updateSales = functions.https.onRequest((req, res) => {
             if(tmpItem.notes === undefined || tmpItem.notes === null) {
                 tmpItem.notes = 'Item Info Not Entered';
             }
-
-            promises.push(admin.database().ref('productSales/' + sku).push({
+            const saleDate = itemsSoldArray[i].saleDate;
+            const notes = itemsSoldArray[i].notes;
+            const childID = i + ':' + sku + ':' + saleDate.toString().replace(/[. \n # $ [ \] ? ( )]/g, '');
+            promises.push(admin.database().ref('productSales/' + sku).child(childID).set({
                 item: itemsSoldArray[i].notes, 
                 price: itemsSoldArray[i].gross_sales_money.amount,
                 qty: itemsSoldArray[i].quantity,
-                date: itemsSoldArray[i].saleDate
+                date: saleDate
             }));
           } // End For Loop
           return Promise.all(promises).then(() => {
             return res.status(200).end();
           }).catch((err) => {console.error('Err in Promise Array: \n', err); res.end(); });
-      }).catch((err) => {console.error('Promise Rejected: ', err).end();});
+      }).catch((err) => {console.error('Promise Rejected: ', err);});
 });
