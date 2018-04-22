@@ -8,3 +8,13 @@ $brand-beach: #f8eddb;
 .br-clr-wh {
     color: $brand-white;
 }
+
+.btn-tgm-primary {
+    background-color: $brand-trq-drk;
+    color: $brand-white;
+    
+    &:hover {
+        background-color: $brand-trq-lt;
+        color: $brand-white;
+    }
+}
