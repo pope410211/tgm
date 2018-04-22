@@ -11,52 +11,47 @@ import { User } from '../models/user';
 @Injectable()
 
 export class AuthService {
-    authState: any = null;
-    user: BehaviorSubject<User> = new BehaviorSubject(null);
-    constructor(
-        private fireAuth: AngularFireAuth,
-        private router: Router,
-        private db: AngularFireDatabase
-    ) {
-        this.fireAuth.authState.switchMap(auth => {
-            if (auth) {
-                console.log('authService', auth);
-                return this.db.object('Users/' + auth.uid).valueChanges();
-            } else {
-                return Observable.of(null);
-            }
-        })
-        .subscribe((user) => {
-            console.log('user 20', user);
-            this.user.next = user;
-        });
-    } // end Constructor
+	authState: any = null;
+	user: BehaviorSubject<User> = new BehaviorSubject(null);
+	constructor(
+		private fireAuth: AngularFireAuth,
+		private router: Router,
+		private db: AngularFireDatabase
+	) {
+		this.fireAuth.authState.switchMap(auth => {
+			if (auth) {
+				return this.db.object('Users/' + auth.uid).valueChanges();
+			} else {
+				return Observable.of(null);
+			}
+		})
+		.subscribe((user) => {
+			this.user.next = user;
+		});
+	} // end Constructor
 
-    signUpWithEmail(email: string, password: string) {
-        return this.fireAuth.auth.createUserWithEmailAndPassword(email, password)
-        .then((user) => {
-            this.authState = user;
-        }).catch(err => {
-            console.error('Create User Error: ', err);
-            throw err;
-        })
-    } // Sign-up With Email. For WebMaster & Owner Only, no self login.
+	signUpWithEmail(email: string, password: string) {
+		return this.fireAuth.auth.createUserWithEmailAndPassword(email, password)
+		.then((user) => {
+			this.authState = user;
+		}).catch(err => {
+			console.error('Create User Error: ', err);
+			throw err;
+		})
+	} // Sign-up With Email. For WebMaster & Owner Only, no self login.
 
-    loginWithEmail(email: string, password: string) {
-        return this.fireAuth.auth.signInWithEmailAndPassword(email, password)
-        .then((user) => {
-            console.log('user ', user.uid);
-            const tmpDb = this.db.object('Users/' + user.uid);
-            console.log('tmpDb', tmpDb);
-            this.authState = user;
-        }).catch(err => {
-            console.error('Login Error: ', err);
-            throw err;
-        });
-    } // End Login W/ Email
+	loginWithEmail(email: string, password: string) {
+		return this.fireAuth.auth.signInWithEmailAndPassword(email, password)
+		.then((user) => {
+			this.authState = user;
+		}).catch(err => {
+			console.error('Login Error: ', err);
+			throw err;
+		});
+	} // End Login W/ Email
 
-    signOut(): void {
-        this.fireAuth.auth.signOut();
-        this.router.navigate(['']);
-    }
+	signOut(): void {
+		this.fireAuth.auth.signOut();
+		this.router.navigate(['home']);
+	}
 } // end Class
