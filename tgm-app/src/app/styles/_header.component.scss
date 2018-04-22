@@ -1,3 +1,4 @@
+// Header Styles
 #b2cNavBar {
     position: fixed;
     width: 100%;
@@ -12,6 +13,30 @@
                 color: $brand-trq-drk;
                 cursor: pointer;
             }
+        }
+    }
+}
+
+
+// Footer Styles
+
+.b2cFooter {
+    background-color: $brand-beach;
+    padding-top: 4rem;
+    padding-bottom: 2.5rem;
+    .footer-list {
+        list-style: none;
+        color: $brand-trq-drk;
+        .footer-link {
+
+            &:hover {
+                color: $brand-trq-lt;
+                cursor: pointer;
+            }
+        }
+        .logo-footer {
+            height: 5rem;
+            width: 6rem;
         }
     }
 }

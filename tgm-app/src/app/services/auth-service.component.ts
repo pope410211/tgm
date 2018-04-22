@@ -1,17 +1,34 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireDatabase } from 'angularfire2/database';
 import { Router } from '@angular/router';
+import { BehaviorSubject} from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/switchMap';
+import { User } from '../models/user';
 
 @Injectable()
 
 export class AuthService {
     authState: any = null;
+    user: BehaviorSubject<User> = new BehaviorSubject(null);
     constructor(
         private fireAuth: AngularFireAuth,
-        private router: Router
+        private router: Router,
+        private db: AngularFireDatabase
     ) {
-        this.fireAuth.authState.subscribe((auth) => {
-            this.authState = auth;
+        this.fireAuth.authState.switchMap(auth => {
+            if (auth) {
+                console.log('authService', auth);
+                return this.db.object('Users/' + auth.uid).valueChanges();
+            } else {
+                return Observable.of(null);
+            }
+        })
+        .subscribe((user) => {
+            console.log('user 20', user);
+            this.user.next = user;
         });
     } // end Constructor
 
@@ -28,6 +45,9 @@ export class AuthService {
     loginWithEmail(email: string, password: string) {
         return this.fireAuth.auth.signInWithEmailAndPassword(email, password)
         .then((user) => {
+            console.log('user ', user.uid);
+            const tmpDb = this.db.object('Users/' + user.uid);
+            console.log('tmpDb', tmpDb);
             this.authState = user;
         }).catch(err => {
             console.error('Login Error: ', err);

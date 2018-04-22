@@ -10,7 +10,7 @@ import 'rxjs/add/operator/mergeMap';
   template: `
     <app-header></app-header>
     <router-outlet></router-outlet>
-
+    <app-footer></app-footer>
   `
 })
 export class AppComponent implements OnInit{

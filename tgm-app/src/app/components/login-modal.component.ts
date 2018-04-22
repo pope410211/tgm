@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth-service.component';
+import { AngularFireDatabase } from 'angularfire2/database';
 import { Router } from '@angular/router';
+import * as _ from 'lodash';
 
 @Component({
-    selector: '<app-login></app-login>',
+    selector: 'app-login',
     templateUrl: '../pages/login-modal.component.html'
 })
 
@@ -12,16 +14,28 @@ export class LoginModalComponent implements OnInit {
  password = '';
  errorMessage = '';
  error: {name: string, message: string} = {name: '', message: ''};
-
+ roles: Array<string>;
+ sku: string;
  constructor(
     public authService: AuthService,
-    private router: Router
- ){} // End constructor
+    private router: Router,
+    private db: AngularFireDatabase
+ ){
+    authService.user.map(user => {
+        const userInfo = {
+            sku: this.sku = _.keys(_.get(user, 'sku')),
+            roles: this.roles = _.keys(_.get(user, 'roles'))
+        };
+        console.log('userInfo', userInfo);
+        return userInfo;
+    }).subscribe()
+
+    console.log('INfo', authService.user);
+ } // End constructor
 
  ngOnInit(){};
 
  onLoginWithEmail():void {
-     console.log('this.email & pass', this.email, this.password );
      if (this.validateForm(this.email, this.password)) {
         this.authService.loginWithEmail(this.email, this.password)
         .then((loginRes) => {
