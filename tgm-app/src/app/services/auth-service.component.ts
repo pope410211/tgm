@@ -18,6 +18,13 @@ export class AuthService {
 		private router: Router,
 		private db: AngularFireDatabase
 	) {
+
+		fireAuth.authState.subscribe((user) => {
+			if (user) {
+				const keepUser = new User(user.uid);
+				this.user.next(keepUser)
+			}
+		})
 		this.fireAuth.authState.switchMap(auth => {
 			if (auth) {
 				return this.db.object('Users/' + auth.uid).valueChanges();

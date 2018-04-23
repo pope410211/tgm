@@ -1,0 +1,20 @@
+<table class="table">
+	<thead>
+		<tr>
+			<th scope="col">Date</th>
+			<th scope="col">SKU</th>
+			<th scope="col">Item</th>
+			<th scope="col">QTY</th>
+			<th scope="col">Price</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let vi of vendorItems | async">
+			<td>{{vi.date | date}}</td>
+			<td>BAA</td>
+			<td>{{vi.item}}</td>
+			<td>{{vi.qty}}</td>
+			<td>{{vi.price}}</td>
+		</tr>
+	</tbody>
+</table>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-header',
@@ -34,9 +35,11 @@ import { Component, OnInit } from '@angular/core';
 
 export class HeaderComponent implements OnInit{
 	logoImagePath: string;
-
-	public constructor() {
+	currentPath: string;
+	public constructor(public currentRoute: Router) {
 		this.logoImagePath = 'assets/logos/tgm_logo-WH.png'
+
+		console.log(this.currentRoute.url);
 	}
 	scroll(id) {
 		const element = document.querySelectorAll(id); 

@@ -6,6 +6,7 @@ import * as firebase from 'firebase';
 import { AngularFireModule } from 'angularfire2'
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireDatabase } from 'angularfire2/database';
 // Environment & Routes
 import { environment } from '../environments/environment';
 import { RoutesModule } from './routes.module';
@@ -49,7 +50,8 @@ import { AuthService } from '../app/services/auth-service.component';
 		FooterComponent
 	],
 	providers: [
-		AuthService
+		AuthService,
+		AngularFireDatabase
 	],
 	bootstrap: [
 		AppComponent
