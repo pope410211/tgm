@@ -1,6 +1,7 @@
-# Turtle Girls Market 
+# Turtle Girls Market
 ##### B2C Site & Vendor Login Portal
 
+### Angular Site Not Completed. Moved to AngularJS temporarily. 
 
 ### Firebase Cloud Functions:
 
